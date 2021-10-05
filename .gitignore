@@ -1,1 +1,5 @@
-/.idea/*
+/.idea
+back/vendor
+back/.env
+back/.phpunit.result.cache
+back/composer.lock
