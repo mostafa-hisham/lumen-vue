@@ -3,3 +3,6 @@ back/vendor
 back/.env
 back/.phpunit.result.cache
 back/composer.lock
+jwt-front/.idea
+jwt-front/node_modules
+jwt-front/package-lock.json

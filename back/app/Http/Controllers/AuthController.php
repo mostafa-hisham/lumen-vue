@@ -74,6 +74,7 @@ class AuthController extends Controller
     protected function respondWithToken($token)
     {
         return response()->json([
+            'user'=> auth()->user(),
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60
@@ -99,7 +100,7 @@ class AuthController extends Controller
             // Final Response
             return response()->json(['message' => 'User is Registered'], 201);
         }catch (\Exception $e){
-            return response()->json(['message' => $e->getMessage()], 201);
+            return response()->json(['message' => $e->getMessage()], 401);
         }
 
     }

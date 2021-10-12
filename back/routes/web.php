@@ -18,15 +18,16 @@ $router->get('/', function () use ($router) {
 });
 
 $router->group(
-    [ 'prefix' => 'api' ],
+    [ 'prefix' => 'api', 'middleware' => ['cors'] ],
     function () use ($router) {
         $router->post('/register',  [ 'uses' => 'AuthController@register' ]);
         $router->post('/login', 'AuthController@login');
+        $router->get('/users', 'UserController@users');
     }
 );
 
 // Users
-$router->group(['prefix' => 'api','middleware' => 'auth'], function () use ($router) {
+$router->group(['prefix' => 'api','middleware' => ['cors','auth']], function () use ($router) {
     $router->get('/me', 'AuthController@me');
     $router->get('/refresh', 'AuthController@refresh');
 });
