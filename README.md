@@ -4,7 +4,7 @@
 
 ### setup lumen
 - in back folder 
-- create `.env` file and add yor DB Config
+- create `.env` file and add your DB Config
 - `composer install`
 - `php artisan migrate`
 - `php artisan DB:seed` (seed users in the table) 
