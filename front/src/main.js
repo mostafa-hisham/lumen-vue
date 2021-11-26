@@ -8,6 +8,7 @@ import BaseButton from './components/ui/BaseButton.vue';
 import BaseBadge from './components/ui/BaseBadge.vue';
 import BaseSpinner from './components/ui/BaseSpinner.vue';
 import BaseDialog from './components/ui/BaseDialog.vue';
+import BasePagination from './components/ui/BasePagination.vue';
 
 const app = createApp(App);
 
@@ -19,6 +20,7 @@ app.component('base-button', BaseButton);
 app.component('base-badge', BaseBadge);
 app.component('base-spinner', BaseSpinner);
 app.component('base-dialog', BaseDialog);
+app.component('base-pagination', BasePagination);
 app.config.globalProperties.$backendUrl = process.env.VUE_APP_BACKEND_URL;
 store.$backendUrl = process.env.VUE_APP_BACKEND_URL;
 app.mount('#app');

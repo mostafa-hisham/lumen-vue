@@ -7,7 +7,8 @@ export default {
     state() {
         return {
             lastFetch: null,
-            users: []
+            compatibilities: [],
+            selectedCompatibility: localStorage.getItem('selectedCompatibility') || null
         };
     },
     mutations,

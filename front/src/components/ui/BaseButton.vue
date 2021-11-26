@@ -58,6 +58,12 @@ button:active {
   border: none;
 }
 
+.flat-red {
+    background-color: #ff1c43;
+    color: white;
+    border: none;
+}
+
 .outline {
   background-color: transparent;
   border-color: #270041;

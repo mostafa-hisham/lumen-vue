@@ -3,11 +3,10 @@
     <nav>
       <h1>
         <span  v-if="isLoggedIn">Hi {{getUserName}}</span>
-        <router-link to="/">Find a User</router-link>
       </h1>
       <ul>
         <li>
-          <router-link to="/users">All Users</router-link>
+          <router-link :to="getHomeUrl">Home</router-link>
         </li>
           <li v-if="!isLoggedIn">
               <router-link to="/login">Login</router-link>
@@ -27,6 +26,11 @@
             },
             getUserName() {
                 return this.$store.getters['auth/getLoggedUser'] ? this.$store.getters['auth/getLoggedUser'].user.name  : null;
+            },
+            getHomeUrl(){
+                const search = this.$route.query.search ? this.$route.query.search : '';
+                const page = this.$route.query.page ? parseInt(this.$route.query.page) : 1;
+                return `/rucss-safelist?search=${search}&page=${page}`;
             }
         },
         methods: {

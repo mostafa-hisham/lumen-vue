@@ -13,3 +13,12 @@
   max-width: 40rem;
 }
 </style>
+<style>
+  .d-label{
+    max-width: 50px;
+    font-weight: bold;
+  }
+  p{
+
+  }
+</style>
