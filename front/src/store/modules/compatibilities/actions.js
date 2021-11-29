@@ -1,28 +1,22 @@
+import ResetRequest from '../../../helpers/reset-request';
+
+const resetRequest = new ResetRequest();
 export default {
     async loadCompatibilities(context, payload) {
         if (!payload.forceRefresh && !context.getters.shouldUpdate) {
             return;
         }
+        try {
+            let url = `${this.$backendUrl}/rucss-safelist?search=${payload.search}&page=${payload.page}`;
 
-        let user = context.rootGetters['auth/getLoggedUser'];
-        let myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + user.access_token);
-        const requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow',
-        };
-        const response = await fetch(
-            `${this.$backendUrl}/rucss-safelist?search=${payload.search}&page=${payload.page}`
-            , requestOptions
-        );
-        const responseData = await response.json();
-        if (!response.ok) {
-            const error = new Error(responseData.message || 'Failed to to get Data! Please login');
-            throw error;
+            const responseData = await resetRequest.sendRequest(url, 'GET', null, true, context);
+            context.commit('setCompatibilities', responseData);
+            context.commit('setFetchTimestamp');
+        } catch (error) {
+            throw new Error(
+                error.message || 'Failed to get Data! Please login.'
+            );
         }
-        context.commit('setCompatibilities', responseData);
-        context.commit('setFetchTimestamp');
     },
 
     async selectCompatibility(context, compatibility_id) {
@@ -50,84 +44,54 @@ export default {
     },
 
     async loadSingleCompatibility(context, compatibility_id) {
-        let user = context.rootGetters['auth/getLoggedUser'];
-        let myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + user.access_token);
-        const requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow',
-        };
-        const response = await fetch(`${this.$backendUrl}/rucss-safelist/${compatibility_id}`, requestOptions);
-        const responseData = await response.json();
-        if (!response.ok) {
-            const error = new Error(responseData.message || 'Failed to fetch!');
-            throw error;
+        try {
+            let url = `${this.$backendUrl}/rucss-safelist/${compatibility_id}`;
+            return await resetRequest.sendRequest(url, 'GET', null, true, context);
+        } catch (error) {
+            throw new Error(
+                error.message || 'Failed to get Data! Please login.'
+            );
         }
-        return responseData;
     },
     async addNewCompatibility(context, compatibilityData) {
-        let user = context.rootGetters['auth/getLoggedUser'];
-        let myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + user.access_token);
-        const requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            redirect: 'follow',
-            body: compatibilityData
-        };
-        const response = await fetch(`${this.$backendUrl}/rucss-safelist/new`, requestOptions);
-
-        const responseData = await response.json();
-        if (!response.ok) {
-            const error = new Error(responseData.message || 'Failed to Add!');
-            throw error;
+        try {
+            let url = `${this.$backendUrl}/rucss-safelist/new`;
+            const responseData = await resetRequest.sendRequest(url, 'POST', compatibilityData, true, context);
+            context.commit('addCompatibility', {
+                ...responseData,
+            });
+        } catch (error) {
+            throw new Error(
+                error.message || 'Failed to add! Please login.'
+            );
         }
-        context.commit('addCompatibility', {
-            ...responseData,
-        });
-
     },
     async editCompatibility(context, compatibilityData) {
-        let user = context.rootGetters['auth/getLoggedUser'];
-        let myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + user.access_token);
-        const requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            redirect: 'follow',
-            body: compatibilityData.formData
-        };
-        const response = await fetch(`${this.$backendUrl}/rucss-safelist/edit/${compatibilityData.id}`, requestOptions);
-
-        const responseData = await response.json();
-        if (!response.ok) {
-            const error = new Error(responseData.message || 'Failed to Add!');
-            throw error;
+        try {
+            let url = `${this.$backendUrl}/rucss-safelist/edit/${compatibilityData.id}`;
+            const responseData = await resetRequest.sendRequest(url, 'POST', compatibilityData.formData, true, context);
+            context.commit('updateCompatibility', {
+                    "compatibility_id": compatibilityData.id,
+                    "data": responseData
+                }
+            );
+        } catch (error) {
+            throw new Error(
+                error.message || 'Failed to edit! Please login.'
+            );
         }
-        context.commit('updateCompatibility', {
-                "compatibility_id": compatibilityData.id,
-                "data": responseData
-            }
-        );
     },
     async deleteCompatibility(context, compatibility_id) {
-        let user = context.rootGetters['auth/getLoggedUser'];
-        let myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer " + user.access_token);
-        const requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            redirect: 'follow',
-        };
-        const response = await fetch(`${this.$backendUrl}/rucss-safelist/delete/${compatibility_id}`, requestOptions);
 
-        const responseData = await response.json();
-        if (!response.ok) {
-            const error = new Error(responseData.message || 'Failed to Add!');
-            throw error;
+        try {
+            let url = `${this.$backendUrl}/rucss-safelist/delete/${compatibility_id}`;
+            await resetRequest.sendRequest(url, 'POST', null, true, context);
+            context.commit('removeCompatibility', compatibility_id,);
+        } catch (error) {
+            throw new Error(
+                error.message || 'Failed to Delete! Please login.'
+            );
         }
-        context.commit('removeCompatibility',  compatibility_id,);
     }
 
 
